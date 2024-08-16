@@ -17,12 +17,12 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {        
         Vector3 newPosition = playerObj.transform.position;
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             newPosition.x += (moveSpeed * Time.deltaTime);
             playerObj.transform.position = newPosition;
         }
-        else if(Input.GetKey(KeyCode.LeftArrow))
+        else if(Input.GetKey(KeyCode.A))
         {
             newPosition.x -= (moveSpeed * Time.deltaTime);
             playerObj.transform.position = newPosition;
