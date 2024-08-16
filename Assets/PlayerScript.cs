@@ -44,31 +44,43 @@ public class PlayerScript : MonoBehaviour
             playerObj.transform.position = newPosition;
         }
         
+        // gets a crate in grab range, if any
+        // does not account for multiple crates within range
+        Transform grabbableCrate = GetGrabbableCrate();
+
         // flip grab toggle
-        if(Input.GetKeyDown(KeyCode.Space) && CrateInGrabRange())
+        if (Input.GetKeyDown(KeyCode.Space) && grabbableCrate != null)
         {
             isGrabbing = !isGrabbing;
 
-            if(isGrabbing)
-            {
-                // parent crate to player
-            }            
+            if (isGrabbing)
+                grabbableCrate.SetParent(playerObj.transform);
+            else
+                // unparents crate from player
+                grabbableCrate.SetParent(null);
         }
     }
 
-    private bool CrateInGrabRange()
+    private Transform GetGrabbableCrate()
     {
         foreach(Transform crateTransform in crateTransforms)
         {
-            if (DistanceBetween(playerObj.transform, crateTransform) < grabRange)      
-                return true;
+            if (CrateInGrabRange(playerObj.transform, crateTransform))
+                return crateTransform;
         }
-        return false;
+        Debug.Log("Issue finding grabbable crates");
+        return null;
     }
 
     // measures distance BETWEEN player and crate transform, not from their centers
-    private float DistanceBetween(Transform playerTransform, Transform crateTransform)
+    // note this currently only measures x, not y distance between
+    private bool CrateInGrabRange(Transform playerTransform, Transform crateTransform)
     {
+        if(playerTransform == null || crateTransform == null)
+        {
+            return false;
+        }
+
         float betweenDistance;
 
         Renderer playerRenderer = GetComponent<Renderer>();
@@ -96,10 +108,8 @@ public class PlayerScript : MonoBehaviour
         }
         
         //Debug.Log("distance to crate edge: " + betweenDistance);
-        return betweenDistance;        
+        if (betweenDistance < grabRange)
+            return true;
+        return false;
     }
 }
-
-// check distance between centers (current)
-// check distance between edge of player facing crate and edge of crate facing player
-// if crate x is more/less than player, change edges used
