@@ -22,7 +22,7 @@ public class PlayerScript : MonoBehaviour
 
         // make grabTriggerRenderer invisible
         Renderer grabTriggerRenderer = grabTrigger.GetComponent<Renderer>();
-        //grabTriggerRenderer.enabled = false;
+        grabTriggerRenderer.enabled = false;
     }
 
     // Update is called once per frame
@@ -90,7 +90,8 @@ public class PlayerScript : MonoBehaviour
         // get rid of transform list later
         foreach(Transform crateTransform in crateTransforms)
         {
-            if (CrateInGrabRange(playerObj.transform, crateTransform))
+            //if (CrateInGrabRange(playerObj.transform, crateTransform))
+            if (GrabTriggerScript.crateGrabbable)
                 return crateTransform;
         }
         //Debug.Log("No crates in range");
@@ -104,6 +105,11 @@ public class PlayerScript : MonoBehaviour
         if(playerTransform == null || crateTransform == null)
         {
             return false;
+        }
+
+        if(GrabTriggerScript.crateGrabbable)
+        {
+            return true;
         }
 
         float betweenDistance;
