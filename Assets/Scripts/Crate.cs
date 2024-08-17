@@ -58,13 +58,19 @@ public class Crate : MonoBehaviour, SizeObject
 
     public int GetMaxSize()
     {
-        return 2;
+        return 3;
     }
 
     public int GetMinSize()
     {
-        return 0;
+        return 1;
     }
 
-    public int size { get; set; } 
+    public int size { get; set; }
+    public void ResizeBy(int sizeDiff)
+    {
+        size += sizeDiff;
+        float scale = (float)(size) / (size - sizeDiff);
+        transform.localScale *= scale;
+    }
 }

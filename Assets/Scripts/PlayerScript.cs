@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
     [SerializeField] GameObject grabTrigger;
     [SerializeField] private GameObject grabbedObject;
     [SerializeField] bool isTriggerVisible;
-    // 0: small, 1: medium, 2: large
+    // 1: small, 2: medium, 3: large
     private Animator animator;
 
     private bool facingRight;
@@ -31,6 +31,21 @@ public class PlayerScript : MonoBehaviour, SizeObject
         // make grabTriggerRenderer invisible
         if (!isTriggerVisible)            
             grabTriggerRenderer.enabled = false;
+    }
+
+    public void ResizeBy(int sizeDiff)
+    {
+        size += sizeDiff;
+        float scale = (float)(size) / (size - sizeDiff);
+        if (isGrabbing)
+        {
+            grabbedObject.transform.localScale /= scale;
+        }
+        float oldSize = GetComponent<BoxCollider2D>().size.y;
+        float newSize = oldSize * scale;
+        float adjustment = (newSize - oldSize) / 2;
+        transform.position += transform.TransformVector(Vector2.up * adjustment);
+        transform.localScale *= scale;
     }
 
     // Update is called once per frame
@@ -94,41 +109,24 @@ public class PlayerScript : MonoBehaviour, SizeObject
         }
 
         // size up
+        
         if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
         {
-            size++;
-            // resizes player and crate since crate is parented
-            playerObj.transform.localScale *= 2;
-            //correct player position so they aren't in the ground
-            playerObj.transform.position +=
-                transform.TransformVector(new Vector2(0,
-                    GetComponent<BoxCollider2D>().size.y / 4));
+            ResizeBy(1);
             //if the crate they are holding is at max size, undo the resize
-            if (isGrabbing && !grabbedObject.GetComponent<SizeObject>().CanExpand())
+            if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanExpand())
             {
-                grabbedObject.transform.localScale /= 2;
+                grabbedObject.GetComponent<SizeObject>().ResizeBy(1);
             }
-            else if (isGrabbing)
-            {
-                grabbedObject.GetComponent<Crate>().size++;
-            }
-            
         }
         //size down
         else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
         {
-            size--;
-            playerObj.transform.localScale /= 2;
-            playerObj.transform.position -=
-                transform.TransformVector(new Vector2(0,
-                    GetComponent<BoxCollider2D>().size.y / 2));
-            if (isGrabbing && !grabbedObject.GetComponent<SizeObject>().CanShrink())
+            ResizeBy(-1);
+            //if the crate they are holding is at max size, undo the resize
+            if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanShrink())
             {
-                grabbedObject.transform.localScale *= 2;
-            }
-            else if (isGrabbing)
-            {
-                grabbedObject.GetComponent<Crate>().size--;
+                grabbedObject.GetComponent<SizeObject>().ResizeBy(-1);
             }
         }
         
@@ -178,12 +176,12 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
     public int GetMaxSize()
     {
-        return 2;
+        return 3;
     }
 
     public int GetMinSize()
     {
-        return 0;
+        return 1;
     }
 
     public int size { get; set; }
