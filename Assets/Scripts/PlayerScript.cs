@@ -41,10 +41,12 @@ public class PlayerScript : MonoBehaviour, SizeObject
         {
             grabbedObject.transform.localScale /= scale;
         }
+
         if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanResizeBy(sizeDiff))
         {
             grabbedObject.GetComponent<SizeObject>().ResizeBy(sizeDiff);
         }
+
         float oldSize = GetComponent<BoxCollider2D>().size.y;
         float newSize = oldSize * scale;
         float adjustment = (newSize - oldSize) / 2;

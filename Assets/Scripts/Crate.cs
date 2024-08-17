@@ -96,8 +96,14 @@ public class Crate : MonoBehaviour, SizeObject
     {
         return 1;
     }
+    
+    [SerializeField] private int internalSize;
+    public int size
+    {
+        get => internalSize;
+        set => internalSize = value;
+    }
 
-    public int size { get; set; }
     public void ResizeBy(int sizeDiff)
     {
         size += sizeDiff;
