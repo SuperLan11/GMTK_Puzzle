@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float grabRange;
     [SerializeField] GameObject grabTrigger;
     [SerializeField] bool isTriggerVisible;
+    private Animator animator;
 
     private bool facingRight;
     private bool isGrabbing;    
@@ -17,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         facingRight = true;
         isGrabbing = false;
         GetCrates();
@@ -46,6 +49,8 @@ public class PlayerScript : MonoBehaviour
             if (!facingRight)            
                 playerObj.transform.eulerAngles = new Vector3(0, 0, 0);                     
             facingRight = true;
+
+            animator.SetBool("isMoving", true);
         }
         // move player left
         else if(Input.GetKey(KeyCode.A))
@@ -57,6 +62,12 @@ public class PlayerScript : MonoBehaviour
             if (facingRight)            
                 playerObj.transform.eulerAngles = new Vector3(0, 180, 0);             
             facingRight = false;
+
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
         }
 
         // when new levels are added, call GetCrates here on entering new level 
