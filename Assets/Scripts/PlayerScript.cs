@@ -56,10 +56,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
             facingRight = false;
         }
 
-        if (xDirection != 0)
-        {
-            animator.SetBool("isMoving", true);
-        }
+        animator.SetBool("isMoving", xDirection != 0);
         
         GetComponent<Rigidbody2D>().velocity = new Vector2(xDirection * moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
         
