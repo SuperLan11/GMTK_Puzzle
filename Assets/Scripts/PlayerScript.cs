@@ -83,11 +83,14 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 // unparents crate from player
                 grabbedObject.transform.SetParent(null);
                 grabbedObject.GetComponent<Crate>().ExitGrabbedState();
+                //flip x direction of throw vector if player is facing left
                 Vector2 correctedThrowVector = throwVector;
                 if (!facingRight)
                 {
                     correctedThrowVector.x *= -1;
                 }
+                
+                //throw crate
                 grabbedObject.GetComponent<Rigidbody2D>().AddForce(correctedThrowVector);
                 grabbedObject = null;
             }
@@ -99,9 +102,11 @@ public class PlayerScript : MonoBehaviour, SizeObject
             size++;
             // resizes player and crate since crate is parented
             playerObj.transform.localScale *= 2;
+            //correct player position so they aren't in the ground
             playerObj.transform.position +=
                 transform.TransformVector(new Vector2(0,
                     GetComponent<BoxCollider2D>().size.y / 4));
+            //if the crate they are holding is at max size, undo the resize
             if (isGrabbing && !grabbedObject.GetComponent<SizeObject>().CanExpand())
             {
                 grabbedObject.transform.localScale /= 2;
@@ -129,7 +134,8 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 grabbedObject.GetComponent<Crate>().size--;
             }
         }
-
+        
+        //jump
         if (Input.GetKeyDown(KeyCode.J) && IsTouchingFloor())
         {
             GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
@@ -148,7 +154,8 @@ public class PlayerScript : MonoBehaviour, SizeObject
             return null;
         }
     }
-
+    
+    //list of objects that the player is touching that are floors
     List<GameObject> floorContacts = new List<GameObject>();
     
     private bool IsTouchingFloor()
@@ -157,6 +164,9 @@ public class PlayerScript : MonoBehaviour, SizeObject
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        //we consider an object a floor if the normal is mostly up
+        //the normal vector is the vector perpendicular to the surface of the object
+        //it points out from the object
         if (other.contacts[0].normal.y > 0.9)
         {
             floorContacts.Add(other.gameObject);
