@@ -42,6 +42,12 @@ public class PlayerScript : MonoBehaviour, SizeObject
         {
             grabbedObject.transform.localScale /= scale;
         }
+
+        if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanResizeBy(sizeDiff))
+        {
+            grabbedObject.GetComponent<SizeObject>().ResizeBy(sizeDiff);
+        }
+
         float oldSize = GetComponent<BoxCollider2D>().size.y;
         float newSize = oldSize * scale;
         float adjustment = (newSize - oldSize) / 2;
@@ -87,15 +93,20 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
             if (isGrabbing)
             {
-                grabbableCrate.SetParent(playerObj.transform);
-                grabbableCrate.gameObject.GetComponent<Crate>().EnterGrabbedState();
+                grabbableCrate.parent = transform;
+                Crate crate = grabbableCrate.gameObject.GetComponent<Crate>();
+                crate.EnterGrabbedState(crate.GetPositionOffsetToTrackPlayer());
+                FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
+                joint.connectedBody = grabbableCrate.gameObject.GetComponent<Rigidbody2D>();
                 grabbedObject = grabbableCrate.gameObject;
             }
             else
             {
+                grabbedObject.transform.parent = null;
                 // unparents crate from player
-                grabbedObject.transform.SetParent(null);
-                grabbedObject.GetComponent<Crate>().ExitGrabbedState();
+                Crate crate = grabbedObject.GetComponent<Crate>();
+                crate.ExitGrabbedState();
+                Destroy(GetComponent<FixedJoint2D>());
                 //flip x direction of throw vector if player is facing left
                 Vector2 correctedThrowVector = throwVector;
                 if (!facingRight)
@@ -104,7 +115,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 }
                 
                 //throw crate
-                grabbedObject.GetComponent<Rigidbody2D>().AddForce(correctedThrowVector);
+                crate.ThrowAll(correctedThrowVector);
                 grabbedObject = null;
             }
         }
@@ -114,21 +125,13 @@ public class PlayerScript : MonoBehaviour, SizeObject
         if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
         {
             ResizeBy(1);
-            //if the crate they are holding is at max size, undo the resize
-            if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanExpand())
-            {
-                grabbedObject.GetComponent<SizeObject>().ResizeBy(1);
-            }
+
         }
         //size down
         else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
         {
             ResizeBy(-1);
-            //if the crate they are holding is at max size, undo the resize
-            if (isGrabbing && grabbedObject.GetComponent<SizeObject>().CanShrink())
-            {
-                grabbedObject.GetComponent<SizeObject>().ResizeBy(-1);
-            }
+
         }
         
         //jump

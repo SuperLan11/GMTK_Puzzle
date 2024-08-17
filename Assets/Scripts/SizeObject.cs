@@ -18,6 +18,11 @@ public interface SizeObject
     {
         return size > GetMinSize();
     }
+    
+    public bool CanResizeBy(int sizeDiff)
+    {
+        return size + sizeDiff <= GetMaxSize() && size + sizeDiff >= GetMinSize();
+    }
 
     public void ResizeBy(int sizeDiff);
 }
