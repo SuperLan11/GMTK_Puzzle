@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Crate : MonoBehaviour, SizeObject
@@ -39,11 +40,19 @@ public class Crate : MonoBehaviour, SizeObject
         GetComponent<Collider2D>().enabled = true;
     }
 
+    float GetBoxColliderHeight(GameObject obj)
+    {
+        BoxCollider2D boxCollider = obj.GetComponent<BoxCollider2D>();
+        return obj.transform.TransformVector(new Vector2(0, boxCollider.size.y)).y;
+    }
+
     void Update()
     {
         if (isGrabbed)
         {
-            transform.position = transform.parent.TransformPoint(grabLocalPos);
+            Vector2 pos = transform.parent.position +
+                          new Vector3(0, (GetBoxColliderHeight(gameObject) + GetBoxColliderHeight(transform.parent.gameObject))/2, 0);
+            transform.position = pos;
         }
     }
 

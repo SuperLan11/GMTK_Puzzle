@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
 {
     [SerializeField] GameObject playerObj;
     [SerializeField] float moveSpeed;
+    [SerializeField] private Vector2 throwVector;
     [SerializeField] private float jumpStrength;
     [SerializeField] float grabRange;
     [SerializeField] GameObject grabTrigger;
@@ -82,6 +83,12 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 // unparents crate from player
                 grabbedObject.transform.SetParent(null);
                 grabbedObject.GetComponent<Crate>().ExitGrabbedState();
+                Vector2 correctedThrowVector = throwVector;
+                if (!facingRight)
+                {
+                    correctedThrowVector.x *= -1;
+                }
+                grabbedObject.GetComponent<Rigidbody2D>().AddForce(correctedThrowVector);
                 grabbedObject = null;
             }
         }
