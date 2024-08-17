@@ -8,12 +8,12 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float grabRange;
     [SerializeField] GameObject grabTrigger;
+    [SerializeField] private GameObject grabbedObject;
     [SerializeField] bool isTriggerVisible;
     private Animator animator;
 
     private bool facingRight;
     private bool isGrabbing;    
-    private List<Transform> crateTransforms = new List<Transform>();
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +22,6 @@ public class PlayerScript : MonoBehaviour
 
         facingRight = true;
         isGrabbing = false;
-        GetCrates();
         
         Renderer grabTriggerRenderer = grabTrigger.GetComponent<Renderer>();
         // make grabTriggerRenderer invisible
@@ -33,59 +32,55 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
-        Vector3 newPosition = playerObj.transform.position;
-        Vector3 newTriggerPosition = grabTrigger.transform.position;
-
-        Renderer playerRenderer = GetComponent<Renderer>();      
-
+        float xDirection = 0;
+        
         // move player right
         if (Input.GetKey(KeyCode.D))
         {
-            newPosition.x += (moveSpeed * Time.deltaTime);            
-            playerObj.transform.position = newPosition;
-
-            newTriggerPosition.x += (moveSpeed * Time.deltaTime);
+            xDirection = 1f;
             // flip player and grab trigger when turning
             if (!facingRight)            
                 playerObj.transform.eulerAngles = new Vector3(0, 0, 0);                     
             facingRight = true;
-
-            animator.SetBool("isMoving", true);
         }
         // move player left
         else if(Input.GetKey(KeyCode.A))
         {
-            newPosition.x -= (moveSpeed * Time.deltaTime);
-            playerObj.transform.position = newPosition;
-
-            newTriggerPosition.x -= (moveSpeed * Time.deltaTime);
+            xDirection = -1f;
             if (facingRight)            
                 playerObj.transform.eulerAngles = new Vector3(0, 180, 0);             
             facingRight = false;
+        }
 
+        if (xDirection != 0)
+        {
             animator.SetBool("isMoving", true);
         }
-        else
-        {
-            animator.SetBool("isMoving", false);
-        }
-
-        // when new levels are added, call GetCrates here on entering new level 
-
+        
+        GetComponent<Rigidbody2D>().velocity = new Vector2(xDirection * moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+        
         // gets a crate in grab range, if any
-        // does not account for multiple crates within range
+        // if multiple crates in range, gets the one that first entered the range
         Transform grabbableCrate = GetGrabbableCrate();
 
         // flip grab toggle
-        if (Input.GetKeyDown(KeyCode.Space) && grabbableCrate != null)
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrabbing || grabbableCrate != null))
         {
             isGrabbing = !isGrabbing;
 
             if (isGrabbing)
+            {
                 grabbableCrate.SetParent(playerObj.transform);
+                grabbableCrate.gameObject.GetComponent<Crate>().EnterGrabbedState();
+                grabbedObject = grabbableCrate.gameObject;
+            }
             else
+            {
                 // unparents crate from player
-                grabbableCrate.SetParent(null);
+                grabbedObject.transform.SetParent(null);
+                grabbedObject.GetComponent<Crate>().ExitGrabbedState();
+                grabbedObject = null;
+            }
         }
 
         // resize player and grabbed crate when shift pressed
@@ -98,28 +93,14 @@ public class PlayerScript : MonoBehaviour
 
     private Transform GetGrabbableCrate()
     {
-        // get rid of transform list later
-        foreach(Transform crateTransform in crateTransforms)
-        {            
-            if (GrabTriggerScript.crateGrabbable)
-                return crateTransform;
-        }
-        //Debug.Log("No crates in range");
-        return null;
-    }
-    
 
-    private List<Transform> GetCrates()
-    {
-        GameObject[] gameObjs = GameObject.FindObjectsOfType<GameObject>();
-        crateTransforms.Clear();
-        foreach (GameObject gameObj in gameObjs)
+        if (grabTrigger.GetComponent<GrabTriggerScript>().cratesTouched.Count > 0)
         {
-            if(gameObj.name.Contains("Crate"))
-            {
-                crateTransforms.Add(gameObj.transform);
-            }
+            return grabTrigger.GetComponent<GrabTriggerScript>().cratesTouched[0].transform;
         }
-        return crateTransforms;
+        else
+        {
+            return null;
+        }
     }
 }

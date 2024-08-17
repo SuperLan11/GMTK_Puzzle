@@ -4,30 +4,27 @@ using UnityEngine;
 
 public class GrabTriggerScript : MonoBehaviour
 {
-    public static bool crateGrabbable;
-    [SerializeField] GameObject crateObj;
+    [SerializeField] public List<GameObject> cratesTouched;
 
     // Start is called before the first frame update
     void Start()
     {
-        crateGrabbable = false;
+        cratesTouched = new List<GameObject>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }    
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (collision.gameObject == crateObj)        
-            crateGrabbable = true;        
+        if (other.gameObject.GetComponent<Crate>() != null)
+        {
+            cratesTouched.Add(other.gameObject);
+        }
     }
 
-    private void OnTriggerExit(Collider collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (collision.gameObject == crateObj)        
-            crateGrabbable = false;                    
+        if (other.gameObject.GetComponent<Crate>() != null)
+        {
+            cratesTouched.Remove(other.gameObject);
+        }             
     }
 }
