@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
 {
     [SerializeField] GameObject playerObj;
     [SerializeField] float moveSpeed;
+    [SerializeField] private float jumpStrength;
     [SerializeField] float grabRange;
     [SerializeField] GameObject grabTrigger;
     [SerializeField] private GameObject grabbedObject;
@@ -85,7 +86,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
             }
         }
 
-        // resize player and grabbed crate when shift pressed
+        // size up
         if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
         {
             size++;
@@ -104,6 +105,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
             }
             
         }
+        //size down
         else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
         {
             size--;
@@ -120,6 +122,11 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 grabbedObject.GetComponent<Crate>().size--;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.J) && IsTouchingFloor())
+        {
+            GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
+        }
     }
 
     private Transform GetGrabbableCrate()
@@ -133,6 +140,26 @@ public class PlayerScript : MonoBehaviour, SizeObject
         {
             return null;
         }
+    }
+
+    List<GameObject> floorContacts = new List<GameObject>();
+    
+    private bool IsTouchingFloor()
+    {
+        return floorContacts.Count > 0;
+    }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.contacts[0].normal.y > 0.9)
+        {
+            floorContacts.Add(other.gameObject);
+        }
+    }
+    
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        //this won't throw if item isn't found
+        floorContacts.Remove(other.gameObject);
     }
 
     public int GetMaxSize()

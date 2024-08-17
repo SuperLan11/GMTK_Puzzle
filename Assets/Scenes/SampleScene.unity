@@ -172,6 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerObj: {fileID: 181835337}
   moveSpeed: 3
+  jumpStrength: 15.17
   grabRange: 0.5
   grabTrigger: {fileID: 1913043841}
   grabbedObject: {fileID: 0}
