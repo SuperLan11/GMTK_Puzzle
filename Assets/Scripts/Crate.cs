@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crate : MonoBehaviour
+public class Crate : MonoBehaviour, SizeObject
 {
     public GameObject crateObj;
     private float oldGravity;
@@ -10,7 +10,12 @@ public class Crate : MonoBehaviour
    
     // box position - player position when grabbed
     private Vector2 grabLocalPos;
-    
+
+    void Start()
+    {
+        size = 1;
+    }
+
     //called when a player grabs this crate
     public void EnterGrabbedState()
     {
@@ -41,4 +46,16 @@ public class Crate : MonoBehaviour
             transform.position = transform.parent.TransformPoint(grabLocalPos);
         }
     }
+
+    public int GetMaxSize()
+    {
+        return 2;
+    }
+
+    public int GetMinSize()
+    {
+        return 0;
+    }
+
+    public int size { get; set; } 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour, SizeObject
 {
     [SerializeField] GameObject playerObj;
     [SerializeField] float moveSpeed;
@@ -10,6 +10,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] GameObject grabTrigger;
     [SerializeField] private GameObject grabbedObject;
     [SerializeField] bool isTriggerVisible;
+    // 0: small, 1: medium, 2: large
     private Animator animator;
 
     private bool facingRight;
@@ -18,7 +19,8 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
+        size = 1;
+        animator = GetComponentInChildren<Animator>();
 
         facingRight = true;
         isGrabbing = false;
@@ -84,10 +86,39 @@ public class PlayerScript : MonoBehaviour
         }
 
         // resize player and grabbed crate when shift pressed
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrabbing && grabbableCrate != null)
+        if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
         {
+            size++;
             // resizes player and crate since crate is parented
             playerObj.transform.localScale *= 2;
+            playerObj.transform.position +=
+                transform.TransformVector(new Vector2(0,
+                    GetComponent<BoxCollider2D>().size.y / 4));
+            if (isGrabbing && !grabbedObject.GetComponent<SizeObject>().CanExpand())
+            {
+                grabbedObject.transform.localScale /= 2;
+            }
+            else if (isGrabbing)
+            {
+                grabbedObject.GetComponent<Crate>().size++;
+            }
+            
+        }
+        else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
+        {
+            size--;
+            playerObj.transform.localScale /= 2;
+            playerObj.transform.position -=
+                transform.TransformVector(new Vector2(0,
+                    GetComponent<BoxCollider2D>().size.y / 2));
+            if (isGrabbing && !grabbedObject.GetComponent<SizeObject>().CanShrink())
+            {
+                grabbedObject.transform.localScale *= 2;
+            }
+            else if (isGrabbing)
+            {
+                grabbedObject.GetComponent<Crate>().size--;
+            }
         }
     }
 
@@ -103,4 +134,17 @@ public class PlayerScript : MonoBehaviour
             return null;
         }
     }
+
+    public int GetMaxSize()
+    {
+        return 2;
+    }
+
+    public int GetMinSize()
+    {
+        return 0;
+    }
+
+    public int size { get; set; }
+
 }
