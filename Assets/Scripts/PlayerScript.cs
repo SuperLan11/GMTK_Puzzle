@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float grabRange;
     [SerializeField] GameObject grabTrigger;
+    [SerializeField] bool isTriggerVisible;
 
     private bool facingRight;
     private bool isGrabbing;    
@@ -19,17 +20,16 @@ public class PlayerScript : MonoBehaviour
         facingRight = true;
         isGrabbing = false;
         GetCrates();
-
-        // make grabTriggerRenderer invisible
+        
         Renderer grabTriggerRenderer = grabTrigger.GetComponent<Renderer>();
-        grabTriggerRenderer.enabled = false;
+        // make grabTriggerRenderer invisible
+        if (!isTriggerVisible)            
+            grabTriggerRenderer.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {        
-        // flip grab trigger to player direction...
-
         Vector3 newPosition = playerObj.transform.position;
         Vector3 newTriggerPosition = grabTrigger.transform.position;
 
@@ -80,8 +80,8 @@ public class PlayerScript : MonoBehaviour
         // resize player and grabbed crate when shift pressed
         if (Input.GetKeyDown(KeyCode.LeftControl) && isGrabbing && grabbableCrate != null)
         {
+            // resizes player and crate since crate is parented
             playerObj.transform.localScale *= 2;
-            grabbableCrate.transform.localScale *= 2;
         }
     }
 
@@ -89,60 +89,14 @@ public class PlayerScript : MonoBehaviour
     {
         // get rid of transform list later
         foreach(Transform crateTransform in crateTransforms)
-        {
-            //if (CrateInGrabRange(playerObj.transform, crateTransform))
+        {            
             if (GrabTriggerScript.crateGrabbable)
                 return crateTransform;
         }
         //Debug.Log("No crates in range");
         return null;
     }
-
-    // measures distance BETWEEN player and crate transform, not from their centers
-    // note this currently only measures x, not y distance between
-    private bool CrateInGrabRange(Transform playerTransform, Transform crateTransform)
-    {
-        if(playerTransform == null || crateTransform == null)
-        {
-            return false;
-        }
-
-        if(GrabTriggerScript.crateGrabbable)
-        {
-            return true;
-        }
-
-        float betweenDistance;
-
-        Renderer playerRenderer = GetComponent<Renderer>();
-        Renderer crateRenderer = crateTransform.GetComponent<Renderer>();
-
-        if(crateTransform.position.x > playerTransform.position.x)
-        {
-            float playerRightEdgeX = playerTransform.position.x;
-            playerRightEdgeX += (playerRenderer.bounds.size.x/2);
-
-            float crateLeftEdgeX = crateTransform.position.x;
-            crateLeftEdgeX -= (crateRenderer.bounds.size.x / 2);
-
-            betweenDistance = (crateLeftEdgeX - playerRightEdgeX);           
-        }
-        else
-        {
-            float playerLeftEdgeX = playerTransform.position.x;
-            playerLeftEdgeX -= (playerRenderer.bounds.size.x / 2);
-
-            float crateRightEdgeX = crateTransform.position.x;
-            crateRightEdgeX -= (crateRenderer.bounds.size.x / 2);
-
-            betweenDistance = (playerLeftEdgeX - crateRightEdgeX);            
-        }
-        
-        //Debug.Log("distance to crate edge: " + betweenDistance);
-        if (betweenDistance < grabRange)
-            return true;
-        return false;
-    }
+    
 
     private List<Transform> GetCrates()
     {
