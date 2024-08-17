@@ -18,4 +18,6 @@ public interface SizeObject
     {
         return size > GetMinSize();
     }
+
+    public void ResizeBy(int sizeDiff);
 }
