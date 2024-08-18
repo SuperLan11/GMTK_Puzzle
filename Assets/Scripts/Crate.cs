@@ -35,6 +35,16 @@ public class Crate : MonoBehaviour, SizeObject
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         
         transform.position += (Vector3) offset;
+        LayerMask layerMask = LayerMask.GetMask("Default");
+
+        Vector3 halfExtents = GetComponent<Renderer>().bounds.extents;
+        bool isColliding = Physics.CheckBox(transform.position, halfExtents, transform.rotation, layerMask);
+        // don't grab box if not enough room
+        if (isColliding)
+        {
+            Debug.Log("box would collide");
+            transform.position -= (Vector3)offset;
+        }
         
         boundCrates = new List<Crate>();
         boundCrates.AddRange(stackedCrates);
