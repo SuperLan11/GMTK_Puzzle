@@ -8,7 +8,7 @@ public class SceneTransfer : MonoBehaviour
     [SerializeField] string targetSceneName;
     Animator anim;
 
-    public void Awake()
+    void Awake()
     {
         anim = GameObject.FindGameObjectWithTag("Fade").GetComponent<Animator>();
     }
@@ -19,7 +19,7 @@ public class SceneTransfer : MonoBehaviour
     IEnumerator LoadScene()
     {
         anim.SetTrigger("Fade");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSecondsRealtime(1f);
         SceneManager.LoadScene(targetSceneName);
     }
 }
