@@ -18,8 +18,9 @@ public class Crate : MonoBehaviour, SizeObject
 
     void Start()
     {
-        stackedCrates = new List<Crate>();
-        size = 1;
+        stackedCrates = new List<Crate>();     
+
+        size = (int)this.transform.localScale.x;
     }
 
     //called when a player grabs this crate
