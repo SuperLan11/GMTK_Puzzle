@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,10 +34,18 @@ public class PlayerScript : MonoBehaviour, SizeObject
             grabTriggerRenderer.enabled = false;
     }
 
+    private Vector3 GetResizeAdjustment(int sizeDiff)
+    {
+        float scale = (float)(size + sizeDiff) / (size);
+        float oldSize = GetComponent<BoxCollider2D>().size.y;
+        float newSize = oldSize * scale;
+        float adjustment = (newSize - oldSize) / 2;
+        return transform.TransformVector(Vector2.up * adjustment);
+    }
+
     public void ResizeBy(int sizeDiff)
     {
-        size += sizeDiff;
-        float scale = (float)(size) / (size - sizeDiff);
+        float scale = (float)(size + sizeDiff) / (size);
         if (isGrabbing)
         {
             grabbedObject.transform.localScale /= scale;
@@ -47,11 +56,20 @@ public class PlayerScript : MonoBehaviour, SizeObject
             grabbedObject.GetComponent<SizeObject>().ResizeBy(sizeDiff);
         }
 
-        float oldSize = GetComponent<BoxCollider2D>().size.y;
-        float newSize = oldSize * scale;
-        float adjustment = (newSize - oldSize) / 2;
-        transform.position += transform.TransformVector(Vector2.up * adjustment);
+        transform.position += GetResizeAdjustment(sizeDiff);
         transform.localScale *= scale;
+        size += sizeDiff;
+    }
+    
+    public (Vector2, Vector2) getNewBounds(int sizeDiff)
+    {
+        float scale = (float)(size + sizeDiff) / (size);
+        Vector2 colliderSize = transform.TransformVector(GetComponent<BoxCollider2D>().size);
+        Vector2 newColliderCenter = transform.position + GetResizeAdjustment(sizeDiff);
+        Vector2 newColliderSize = colliderSize * scale;
+        Debug.Log(newColliderCenter);
+        Debug.Log(newColliderSize);
+        return (newColliderCenter, newColliderSize);
     }
 
     // Update is called once per frame
@@ -123,8 +141,48 @@ public class PlayerScript : MonoBehaviour, SizeObject
         
         if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
         {
-            ResizeBy(1);
+            var (newColliderCenter, newColliderSize) = getNewBounds(1);
+            int layerMask = ~(1 << LayerMask.NameToLayer("player"));
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(newColliderCenter, newColliderSize * 0.99f, 0, layerMask);
+            List<Crate> crates = new List<Crate>();
+            bool resizePossible = true;
+            foreach (Collider2D collider2D in colliders)
+            {
+                if (!isGrabbing)
+                {
+                    Debug.Log(collider2D.gameObject.name);
+                    resizePossible = false;
+                    break;
+                }
+                Crate crate = collider2D.gameObject.GetComponent<Crate>();
+                if (crate == null)
+                {
+                    resizePossible = false;
+                    break;
+                }
+                else
+                {
+                    crates.Add(crate);
+                }
+            }
 
+            if (resizePossible && isGrabbing)
+            {
+                List<Crate> grabbedCrates = grabbedObject.GetComponent<Crate>().GetAllCrates();
+                foreach (Crate crate in crates)
+                {
+                    if (!grabbedCrates.Contains(crate))
+                    {
+                        resizePossible = false;
+                        break;
+                    }
+                }
+            }
+
+            if (resizePossible)
+            {
+                ResizeBy(1);
+            }
         }
         //size down
         else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
