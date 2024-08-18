@@ -195,7 +195,7 @@ MonoBehaviour:
   playerObj: {fileID: 3326100459179894559}
   moveSpeed: 6.5
   throwVector: {x: 270.8, y: 196.36}
-  jumpStrength: 9.5
+  jumpStrength: 10.5
   grabRange: 0.5
   grabTrigger: {fileID: 658228079954588179}
   grabbedObject: {fileID: 0}
@@ -260,7 +260,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.65
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

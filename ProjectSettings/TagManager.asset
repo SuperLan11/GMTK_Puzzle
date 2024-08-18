@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Fade
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -13,7 +12,7 @@ TagManager:
   - Water
   - UI
   - player
-  - 
+  - doors
   - 
   - 
   - 
@@ -39,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: default
+    uniqueID: 2190915101
+    locked: 0
+  - name: doors
+    uniqueID: 1763465049
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
