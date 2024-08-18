@@ -29,7 +29,7 @@ public class Crate : MonoBehaviour, SizeObject
         isGrabbed = true;
         oldGravity = GetComponent<Rigidbody2D>().gravityScale;
         //keep block from falling
-        GetComponent<Rigidbody2D>().gravityScale = 0;
+        //GetComponent<Rigidbody2D>().gravityScale = 0;
         
         //keep block from sliding
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -144,5 +144,14 @@ public class Crate : MonoBehaviour, SizeObject
             allCrates.AddRange(crate.GetAllCrates());
         }
         return allCrates;
+    }
+
+    public void JumpAll(Vector2 velocity)
+    {
+        GetComponent<Rigidbody2D>().velocity += velocity;
+        foreach (Crate crate in boundCrates)
+        {
+            crate.JumpAll(velocity);
+        }
     }
 }

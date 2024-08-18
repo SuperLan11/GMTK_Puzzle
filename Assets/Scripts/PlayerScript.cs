@@ -195,7 +195,11 @@ public class PlayerScript : MonoBehaviour, SizeObject
         //jump
         if (Input.GetKeyDown(KeyCode.J) && IsTouchingFloor())
         {
-            GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
+            GetComponent<Rigidbody2D>().velocity += (Vector2.up * jumpStrength);
+            if (isGrabbing)
+            {
+                grabbedObject.GetComponent<Crate>().JumpAll(Vector2.up * jumpStrength);
+            }
         }
     }
 

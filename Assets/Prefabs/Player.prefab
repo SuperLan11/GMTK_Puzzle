@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1584305625775475924}
   - component: {fileID: 5190816047180268926}
   - component: {fileID: 3112721520796648613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GrabTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,9 +193,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObj: {fileID: 3326100459179894559}
-  moveSpeed: 3
+  moveSpeed: 6.5
   throwVector: {x: 270.8, y: 196.36}
-  jumpStrength: 15.17
+  jumpStrength: 9.5
   grabRange: 0.5
   grabTrigger: {fileID: 658228079954588179}
   grabbedObject: {fileID: 0}
