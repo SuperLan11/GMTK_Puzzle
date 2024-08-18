@@ -28,8 +28,7 @@ public class Button : MonoBehaviour
         //Debug.Log("end position: " + endPositionY);
         // change later so it moves up relative to orientation
         if(isMoving && doorObj.transform.position.y < endPositionY)
-        {
-            Debug.Log("moving door...");
+        {            
             Vector3 newPosition = doorObj.transform.position;
             newPosition.y += (Time.deltaTime * doorSpeed);
             doorObj.transform.position = newPosition;

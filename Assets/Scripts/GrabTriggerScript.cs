@@ -18,6 +18,11 @@ public class GrabTriggerScript : MonoBehaviour
         {
             cratesTouched.Add(other.gameObject);
         }
+
+        if (other.gameObject.name.Contains("GoalTrigger"))
+        {
+            // load next scene with scene transfer            
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)

@@ -7,7 +7,7 @@ public class MainMenuScript : MonoBehaviour
 {
     public void BeginGame()
     {        
-        SceneManager.LoadScene("SampleScene");        
+        SceneManager.LoadScene("Level 1");        
     }
 
     public void OpenOptions()
