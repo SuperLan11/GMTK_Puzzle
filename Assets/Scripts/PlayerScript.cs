@@ -23,6 +23,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
     void Start()
     {
         size = 1;
+        ResizeBy(1);
         animator = GetComponentInChildren<Animator>();
 
         facingRight = true;
