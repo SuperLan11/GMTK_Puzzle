@@ -69,8 +69,7 @@ float4 GetGlowColor(float d, float scale)
 	float t = lerp(_GlowInner, (_GlowOuter * _ScaleRatioB), step(0.0, glow)) * 0.5 * scale;
 	glow = saturate(abs(glow/(1.0 + t)));
 	glow = 1.0-pow(glow, _GlowPower);
-	glow *= sqrt(min(1.0, t)); // 
-	off glow thinner than 1 screen pixel
+	glow *= sqrt(min(1.0, t)); // Fade off glow thinner than 1 screen pixel
 	return float4(_GlowColor.rgb, saturate(_GlowColor.a * glow * 2));
 }
 
