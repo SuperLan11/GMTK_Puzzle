@@ -20,6 +20,13 @@ public class RatWallTrigger : MonoBehaviour
         ratObj.transform.localScale = flippedScale;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector3 flippedScale = ratObj.transform.localScale;
+        flippedScale.x *= -1;
+        ratObj.transform.localScale = flippedScale;
+    }
+
     // Update is called once per frame
     void Update()
     {

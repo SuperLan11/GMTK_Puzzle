@@ -7,7 +7,7 @@ public class Button : MonoBehaviour
     [SerializeField] GameObject doorObj;
     [SerializeField] Sprite pressedButton;
     [SerializeField] float doorSpeed;
-    private bool isMoving;
+    private bool doorIsMoving;
     private float endPositionY;
     private bool pressed;
 
@@ -16,7 +16,7 @@ public class Button : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isMoving = false;
+        doorIsMoving = false;
         pressed = false;
         // door moves up its entire length
         endPositionY = doorObj.transform.position.y + doorObj.GetComponent<Renderer>().bounds.size.y;
@@ -27,7 +27,7 @@ public class Button : MonoBehaviour
     {
         //Debug.Log("end position: " + endPositionY);
         // change later so it moves up relative to orientation
-        if(isMoving && doorObj.transform.position.y < endPositionY)
+        if(doorIsMoving && doorObj.transform.position.y < endPositionY)
         {            
             Vector3 newPosition = doorObj.transform.position;
             newPosition.y += (Time.deltaTime * doorSpeed);
@@ -35,12 +35,14 @@ public class Button : MonoBehaviour
         }
         else
         {
-            isMoving = false;
+            doorIsMoving = false;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("button collision");
+
         if (pressed)
             return;
 
@@ -52,7 +54,7 @@ public class Button : MonoBehaviour
             pressed = true;
             GetComponent<SpriteRenderer>().sprite = pressedButton;
             GetComponent<BoxCollider2D>().size = pressedCollider;
-            isMoving = true;            
+            doorIsMoving = true;            
 
             GetComponent<AudioSource>().Play();            
         }                    

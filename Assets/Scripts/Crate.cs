@@ -33,8 +33,8 @@ public class Crate : MonoBehaviour, SizeObject
         
         //keep block from sliding
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        
-        transform.position += (Vector3) offset;
+
+        transform.position += (Vector3)offset;
         LayerMask layerMask = LayerMask.GetMask("Default");
 
         Vector3 halfExtents = GetComponent<Renderer>().bounds.extents;
@@ -45,7 +45,7 @@ public class Crate : MonoBehaviour, SizeObject
             Debug.Log("box would collide");
             transform.position -= (Vector3)offset;
         }
-        
+
         boundCrates = new List<Crate>();
         boundCrates.AddRange(stackedCrates);
         foreach (Crate crate in boundCrates)
