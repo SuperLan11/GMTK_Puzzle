@@ -117,7 +117,7 @@ public class Crate : MonoBehaviour, SizeObject
 
     public void ResizeBy(int sizeDiff)
     {
-        float scale = (float)(size) / (size - sizeDiff);
+        float scale = (float)(size + sizeDiff) / (size);
         bool resized = false;
         if (((SizeObject)this).CanResizeBy(sizeDiff))
         {
