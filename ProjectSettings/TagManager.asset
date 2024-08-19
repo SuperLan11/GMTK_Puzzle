@@ -42,6 +42,9 @@ TagManager:
   - name: backgrounds
     uniqueID: 2190915101
     locked: 0
+  - name: outline
+    uniqueID: 1238828883
+    locked: 0
   - name: doors
     uniqueID: 1763465049
     locked: 0
