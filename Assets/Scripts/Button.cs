@@ -44,7 +44,10 @@ public class Button : MonoBehaviour
         if (pressed)
             return;
 
-        if (collision.gameObject.GetComponent<Crate>() is Crate)
+        bool isCrate = collision.gameObject.GetComponent<Crate>() is Crate;
+        bool isRat = collision.gameObject.GetComponent<Rat>() is Rat;
+
+        if (isCrate || isRat)
         {            
             pressed = true;
             GetComponent<SpriteRenderer>().sprite = pressedButton;
