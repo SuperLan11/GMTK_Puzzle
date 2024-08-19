@@ -107,7 +107,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
         Transform grabbableCrate = GetGrabbableCrate();
 
         // flip grab toggle
-        if (Input.GetKeyDown(KeyCode.L) && (isGrabbing || grabbableCrate != null))
+        if (Input.GetKeyDown(KeyCode.J) && (isGrabbing || grabbableCrate != null))
         {
             isGrabbing = !isGrabbing;
 
@@ -142,7 +142,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
         // size up
         
-        if (Input.GetKeyDown(KeyCode.K) && ((SizeObject)this).CanExpand())
+        if (Input.GetKeyDown(KeyCode.L) && ((SizeObject)this).CanExpand())
         {
             var (newColliderCenter, newColliderSize) = getNewBounds(1);
             int layerMask = ~(1 << LayerMask.NameToLayer("player"));
@@ -188,7 +188,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
             }
         }
         //size down
-        else if (Input.GetKeyDown(KeyCode.J) && ((SizeObject)this).CanShrink())
+        else if (Input.GetKeyDown(KeyCode.K) && ((SizeObject)this).CanShrink())
         {
             ResizeBy(-1);
 
@@ -203,7 +203,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
                 grabbedObject.GetComponent<Crate>().JumpAll(Vector2.up * jumpStrength);
             }                                   
         }
-        else if(Input.GetKeyDown(KeyCode.J) && !IsTouchingFloor())
+        else if(Input.GetKeyDown(KeyCode.Space) && !IsTouchingFloor())
         {
             Debug.Log("not touching floor");
         }
