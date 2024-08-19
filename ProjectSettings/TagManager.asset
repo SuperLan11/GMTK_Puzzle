@@ -14,7 +14,7 @@ TagManager:
   - UI
   - player
   - doors
-  - 
+  - crates
   - 
   - 
   - 
@@ -53,4 +53,10 @@ TagManager:
     locked: 0
   - name: rats
     uniqueID: 2455345565
+    locked: 0
+  - name: clouds
+    uniqueID: 764552671
+    locked: 0
+  - name: cloudText
+    uniqueID: 1635829907
     locked: 0

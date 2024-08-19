@@ -107,7 +107,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
         Transform grabbableCrate = GetGrabbableCrate();
 
         // flip grab toggle
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrabbing || grabbableCrate != null))
+        if (Input.GetKeyDown(KeyCode.L) && (isGrabbing || grabbableCrate != null))
         {
             isGrabbing = !isGrabbing;
 
@@ -142,7 +142,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
         // size up
         
-        if (Input.GetKeyDown(KeyCode.E) && ((SizeObject)this).CanExpand())
+        if (Input.GetKeyDown(KeyCode.K) && ((SizeObject)this).CanExpand())
         {
             var (newColliderCenter, newColliderSize) = getNewBounds(1);
             int layerMask = ~(1 << LayerMask.NameToLayer("player"));
@@ -188,14 +188,14 @@ public class PlayerScript : MonoBehaviour, SizeObject
             }
         }
         //size down
-        else if (Input.GetKeyDown(KeyCode.Q) && ((SizeObject)this).CanShrink())
+        else if (Input.GetKeyDown(KeyCode.J) && ((SizeObject)this).CanShrink())
         {
             ResizeBy(-1);
 
         }
 
         //jump
-        if (Input.GetKeyDown(KeyCode.J) && IsTouchingFloor())        
+        if (Input.GetKeyDown(KeyCode.Space) && IsTouchingFloor())        
         {            
             GetComponent<Rigidbody2D>().velocity += (Vector2.up * jumpStrength);
             if (isGrabbing)
