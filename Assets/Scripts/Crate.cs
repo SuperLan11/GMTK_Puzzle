@@ -117,15 +117,24 @@ public class Crate : MonoBehaviour, SizeObject
 
     public void ResizeBy(int sizeDiff)
     {
-        size += sizeDiff;
         float scale = (float)(size) / (size - sizeDiff);
-        transform.localScale *= scale;
+        bool resized = false;
+        if (((SizeObject)this).CanResizeBy(sizeDiff))
+        {
+            size += sizeDiff;
+            transform.localScale *= scale;
+            resized = true;
+        }
         if (isGrabbed)
         {
-            /*foreach (Crate crate in boundCrates)
+            foreach (Crate crate in boundCrates)
             {
+                if (resized)
+                {
+                    crate.transform.localScale /= scale;
+                }
                 crate.ResizeBy(sizeDiff);
-            }*/
+            }
         }
     }
 

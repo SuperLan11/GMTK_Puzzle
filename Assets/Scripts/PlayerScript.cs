@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour, SizeObject
@@ -213,7 +214,17 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
         if (grabTrigger.GetComponent<GrabTriggerScript>().cratesTouched.Count > 0)
         {
-            return grabTrigger.GetComponent<GrabTriggerScript>().cratesTouched[0].transform;
+            List<GameObject> crates = grabTrigger.GetComponent<GrabTriggerScript>().cratesTouched;
+            GameObject lowestCrate = crates[0];
+            foreach (GameObject crate in crates)
+            {
+                if (crate.transform.position.y < lowestCrate.transform.position.y)
+                {
+                    lowestCrate = crate;
+                }
+            }
+
+            return lowestCrate.transform;
         }
         else
         {
