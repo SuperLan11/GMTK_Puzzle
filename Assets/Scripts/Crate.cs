@@ -158,6 +158,7 @@ public class Crate : MonoBehaviour, SizeObject
 
     public void JumpAll(Vector2 velocity)
     {
+        Debug.Log(GetComponent<Rigidbody2D>().velocity);
         GetComponent<Rigidbody2D>().velocity += velocity;
         foreach (Crate crate in boundCrates)
         {

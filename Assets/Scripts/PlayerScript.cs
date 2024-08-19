@@ -220,36 +220,23 @@ public class PlayerScript : MonoBehaviour, SizeObject
             return null;
         }
     }
-    
-    //list of objects that the player is touching that are floors
-    List<GameObject> floorContacts = new List<GameObject>();    
-    
     private bool IsTouchingFloor()
     {
-        return floorContacts.Count > 0;
+        ContactFilter2D contactFilter = new ContactFilter2D
+        {
+            minNormalAngle = 80,
+            maxNormalAngle = 100,
+            useNormalAngle = true
+        };
+        ContactPoint2D[] contacts = new ContactPoint2D[1];
+        int numContacts = GetComponent<BoxCollider2D>().GetContacts(contactFilter, contacts);
+        return numContacts > 0;
     }
 
     private bool CanGrabCrate()
     {
         // check if grabbed crate position would collide wall
         return true;
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        //we consider an object a floor if the normal is mostly up
-        //the normal vector is the vector perpendicular to the surface of the object
-        //it points out from the object
-        if (other.contacts[0].normal.y > 0.9)
-        {
-            floorContacts.Add(other.gameObject);
-        }
-    }
-    
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        //this won't throw if item isn't found
-        floorContacts.Remove(other.gameObject);
     }
 
     public int GetMaxSize()
