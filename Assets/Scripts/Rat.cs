@@ -4,36 +4,35 @@ using UnityEngine;
 
 public class Rat : MonoBehaviour
 {
-    [SerializeField] float speed;
+    [SerializeField] float speed;    
     private bool facingRight;
     
     // Start is called before the first frame update
     void Start()
     {
-        facingRight = true;
+        facingRight = true;                
     }
 
     // Update is called once per frame
     void Update()
-    {
-        Vector3 newPosition = transform.position;
-        if(facingRight)
+    {        
+        // localScale.x is inverted by RatWallTrigger.cs
+        if(transform.localScale.x > 0)
         {
-            newPosition.x += (Time.deltaTime * speed);
-        }
+            facingRight = true;
+        }    
         else
         {
-            newPosition.x -= (Time.deltaTime * speed);
+            facingRight = false;
         }
-        transform.position = newPosition;
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        facingRight = !facingRight;
-    }
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        facingRight = !facingRight;
-    }
+           
+        if(facingRight)
+        {            
+            GetComponent<Rigidbody2D>().velocity = new Vector2(speed, GetComponent<Rigidbody2D>().velocity.y);
+        }
+        else
+        {            
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-speed, GetComponent<Rigidbody2D>().velocity.y);
+        }        
+    }   
 }

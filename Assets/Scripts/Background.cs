@@ -12,10 +12,6 @@ public class Background : MonoBehaviour
         Vector3 playerPosition = GameObject.Find("Player").transform.position;
         oldPlayerPosition = playerPosition;
 
-        /*Vector3 startPosition = playerPosition;        
-        startPosition.z = 10;
-        transform.position = startPosition;*/
-
         offsetToAdd = new Vector3(0, 0, 0);        
     }
 
@@ -23,8 +19,7 @@ public class Background : MonoBehaviour
     public void Update()
     {                
         Vector3 newPlayerPosition = FindObjectOfType<PlayerScript>().transform.position;
-        
-        // adding because player is in negative position?
+               
         float xDistMoved = newPlayerPosition.x - oldPlayerPosition.x;
         float yDistMoved = newPlayerPosition.y - oldPlayerPosition.y;    
 
