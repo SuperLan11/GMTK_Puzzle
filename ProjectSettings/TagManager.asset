@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Fade
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - UI
   - player
   - doors
-  - 
+  - backgrounds
   - 
   - 
   - 
@@ -38,7 +39,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: default
+  - name: backgrounds
     uniqueID: 2190915101
     locked: 0
   - name: doors

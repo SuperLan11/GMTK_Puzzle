@@ -97,9 +97,10 @@ public class PlayerScript : MonoBehaviour, SizeObject
         }
 
         animator.SetBool("isMoving", xDirection != 0);
+                
         
-        GetComponent<Rigidbody2D>().velocity = new Vector2(xDirection * moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
-        
+        GetComponent<Rigidbody2D>().velocity = new Vector2(xDirection * moveSpeed, GetComponent<Rigidbody2D>().velocity.y);        
+
         // gets a crate in grab range, if any
         // if multiple crates in range, gets the one that first entered the range
         Transform grabbableCrate = GetGrabbableCrate();
@@ -199,7 +200,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
             if (isGrabbing)
             {
                 grabbedObject.GetComponent<Crate>().JumpAll(Vector2.up * jumpStrength);
-            }
+            }                                   
         }
         else if(Input.GetKeyDown(KeyCode.J) && !IsTouchingFloor())
         {
@@ -221,7 +222,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
     }
     
     //list of objects that the player is touching that are floors
-    List<GameObject> floorContacts = new List<GameObject>();
+    List<GameObject> floorContacts = new List<GameObject>();    
     
     private bool IsTouchingFloor()
     {
