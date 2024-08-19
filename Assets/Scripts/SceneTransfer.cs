@@ -14,6 +14,7 @@ public class SceneTransfer : MonoBehaviour
     }
     public void Load()
     {
+        Debug.Log("loading scene");
         StartCoroutine(LoadScene());
     }
     IEnumerator LoadScene()
