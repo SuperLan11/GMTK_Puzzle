@@ -21,6 +21,6 @@ public class SceneTransfer : MonoBehaviour
     {
         anim.SetTrigger("Fade");
         yield return new WaitForSecondsRealtime(1f);
-        SceneManager.LoadScene(targetSceneName);
+        SceneManager.LoadSceneAsync(targetSceneName).completed += _ => FindObjectOfType<PlayerScript>().TeleportToCheckpoint();
     }
 }
