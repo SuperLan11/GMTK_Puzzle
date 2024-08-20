@@ -127,7 +127,7 @@ public class PlayerScript : SizeObject
 
             if (!isGrabbing)
             {
-                if (grabbableCrate.GetComponent<Crate>().CanMoveToBase(transform.position.y + GetBoxColliderHeight(gameObject)/2))
+                if (grabbableCrate.GetComponent<Crate>().CanMoveToBase(transform.position.y + GetBoxColliderHeight(gameObject)/2, transform.position.x))
                 {
                     isGrabbing = !isGrabbing;
                     grabbableCrate.parent = transform;
@@ -205,6 +205,14 @@ public class PlayerScript : SizeObject
                         break;
                     }
                 }
+            }
+            
+            float scale = (float)(size + 1) / (size);
+            if (isGrabbing && !grabbedObject.GetComponent<Crate>()
+                    .CanMoveToBase(GetBoxColliderHeight(gameObject) * scale / 2 + transform.position.y,
+                        transform.position.x, 1))
+            {
+                resizePossible = false;
             }
 
             if (resizePossible)

@@ -714,7 +714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 562122032}
   - component: {fileID: 562122031}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 615164469}
   - component: {fileID: 615164468}
   - component: {fileID: 615164467}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

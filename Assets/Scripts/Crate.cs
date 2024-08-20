@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class Crate : SizeObject
 {
-    public GameObject crateObj;
     private float oldGravity;
     private bool isGrabbed;
     private List<SizeObject> stackedCrates;
@@ -102,12 +101,16 @@ public class Crate : SizeObject
     
     private bool WouldCollide(Vector2 center, Vector2 size)
     {
+        //load prefab from Assets/Prefabs/Square.prefab
+        //GameObject square = Instantiate(Resources.Load<GameObject>("Square"), center, Quaternion.identity);
+        //square.transform.position = center;
+        //square.transform.localScale = size;
         RaycastHit2D[] hits = Physics2D.BoxCastAll(
             center,
             size,
             0,
             Vector2.zero,
-            0,
+            Mathf.Infinity,
             ~(1 << LayerMask.NameToLayer("player"))
         );
         foreach (RaycastHit2D hit in hits)
@@ -122,20 +125,26 @@ public class Crate : SizeObject
         return false;
     }
 
-    public bool CanMoveToBase(float y)
+    public bool CanMoveToBase(float y, float x, int resize = 0)
     {
-        Vector2 pos = GetPositionWithBase(y);
-        bool collide = WouldCollide(pos, transform.TransformVector(GetComponent<BoxCollider2D>().size));
+        float scale = 1;
+        if (CanResizeBy(resize))
+        {
+            scale = (float)(size + resize) / (size);
+        }
+        Vector2 pos = GetPositionWithBase(y, scale);
+        pos.x = x;
+        bool collide = WouldCollide(pos, transform.TransformVector(GetComponent<BoxCollider2D>().size) * scale);
         if (collide)
         {
             return false;
         }
-        float topY = pos.y + GetBoxColliderHeight(gameObject) / 2;
+        float topY = pos.y + GetBoxColliderHeight(gameObject) * scale / 2;
         foreach (SizeObject crate in stackedCrates)
         {
             if (crate is Crate)
             {
-                if (!((Crate)crate).CanMoveToBase(topY))
+                if (!((Crate)crate).CanMoveToBase(topY, x, resize))
                 {
                     return false;
                 }
@@ -145,9 +154,9 @@ public class Crate : SizeObject
         return true;
     }
 
-    private Vector2 GetPositionWithBase(float y)
+    private Vector2 GetPositionWithBase(float y, float scale = 1)
     {
-        Vector2 pos = new Vector2(transform.position.x, y + GetBoxColliderHeight(gameObject) / 2);
+        Vector2 pos = new Vector2(transform.position.x, y + (GetBoxColliderHeight(gameObject) * scale) / 2);
         return pos;
     }
 
@@ -172,7 +181,7 @@ public class Crate : SizeObject
     {
         float scale = (float)(size + sizeDiff) / (size);
         bool resized = false;
-        if (((SizeObject)this).CanResizeBy(sizeDiff))
+        if (CanResizeBy(sizeDiff))
         {
             size += sizeDiff;
             transform.localScale *= scale;
