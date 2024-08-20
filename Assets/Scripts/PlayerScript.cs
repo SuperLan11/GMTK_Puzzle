@@ -124,19 +124,29 @@ public class PlayerScript : SizeObject
         // flip grab toggle
         if (Input.GetKeyDown(KeyCode.J) && (isGrabbing || grabbableCrate != null))
         {
-            isGrabbing = !isGrabbing;
 
-            if (isGrabbing)
+            if (!isGrabbing)
             {
-                grabbableCrate.parent = transform;
-                Crate crate = grabbableCrate.gameObject.GetComponent<Crate>();
-                crate.EnterGrabbedState(crate.GetPositionOffsetToTrackPlayer());
-                FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-                joint.connectedBody = grabbableCrate.gameObject.GetComponent<Rigidbody2D>();
-                grabbedObject = grabbableCrate.gameObject;
+                if (grabbableCrate.GetComponent<Crate>().CanMoveToBase(transform.position.y + GetBoxColliderHeight(gameObject)/2))
+                {
+                    isGrabbing = !isGrabbing;
+                    grabbableCrate.parent = transform;
+                    Crate crate = grabbableCrate.gameObject.GetComponent<Crate>();
+                    crate.EnterGrabbedState(crate.GetPositionOffsetToTrackPlayer());
+                    FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
+                    joint.connectedBody = grabbableCrate.gameObject.GetComponent<Rigidbody2D>();
+                    grabbedObject = grabbableCrate.gameObject;
+                }
+                else
+                {
+                    
+                    Debug.Log("grab rejected");
+                }
             }
             else
             {
+                isGrabbing = !isGrabbing;
+
                 grabbedObject.transform.parent = null;
                 // unparents crate from player
                 Crate crate = grabbedObject.GetComponent<Crate>();

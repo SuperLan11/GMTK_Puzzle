@@ -24,6 +24,14 @@ public class Crate : SizeObject
         size = (int)Math.Round(this.transform.localScale.x);
     }
 
+    /*private void Update()
+    {
+        if (isGrabbed && WouldCollide(transform.position, GetComponent<BoxCollider2D>().size))
+        {
+            Debug.Log("yeeeeeeeet");
+        }
+    }*/
+
     //called when a player grabs this crate
     public override void EnterGrabbedState(Vector2 offset)
     {
@@ -91,11 +99,39 @@ public class Crate : SizeObject
             crate.ThrowAll(force);
         }
     }
-
-    float GetBoxColliderHeight(GameObject obj)
+    
+    private bool WouldCollide(Vector2 center, Vector2 size)
     {
-        BoxCollider2D boxCollider = obj.GetComponent<BoxCollider2D>();
-        return obj.transform.TransformVector(new Vector2(0, boxCollider.size.y)).y;
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(
+            center,
+            size,
+            0,
+            Vector2.zero,
+            0,
+            ~(1 << LayerMask.NameToLayer("player"))
+        );
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.gameObject != gameObject)
+            {
+                Debug.Log(hit.collider.gameObject.name);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool CanMoveToBase(float y)
+    {
+        Vector2 pos = GetPositionWithBase(y);
+        return !WouldCollide(pos, transform.TransformVector(GetComponent<BoxCollider2D>().size));
+    }
+
+    private Vector2 GetPositionWithBase(float y)
+    {
+        Vector2 pos = new Vector2(transform.position.x, y + GetBoxColliderHeight(gameObject) / 2);
+        return pos;
     }
 
     public Vector2 GetPositionOffsetToTrackPlayer()

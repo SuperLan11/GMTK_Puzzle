@@ -10,6 +10,13 @@ public abstract class SizeObject : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<Rigidbody2D>().AddForce(force * GetComponent<Rigidbody2D>().mass);
     }
+    
+    public float GetBoxColliderHeight(GameObject obj)
+    {
+        BoxCollider2D boxCollider = obj.GetComponent<BoxCollider2D>();
+        return obj.transform.TransformVector(new Vector2(0, boxCollider.size.y)).y;
+    }
+
 
     public int size;
 
