@@ -125,7 +125,24 @@ public class Crate : SizeObject
     public bool CanMoveToBase(float y)
     {
         Vector2 pos = GetPositionWithBase(y);
-        return !WouldCollide(pos, transform.TransformVector(GetComponent<BoxCollider2D>().size));
+        bool collide = WouldCollide(pos, transform.TransformVector(GetComponent<BoxCollider2D>().size));
+        if (collide)
+        {
+            return false;
+        }
+        float topY = pos.y + GetBoxColliderHeight(gameObject) / 2;
+        foreach (SizeObject crate in stackedCrates)
+        {
+            if (crate is Crate)
+            {
+                if (!((Crate)crate).CanMoveToBase(topY))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private Vector2 GetPositionWithBase(float y)
