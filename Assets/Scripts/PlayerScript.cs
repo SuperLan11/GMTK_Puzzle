@@ -18,7 +18,7 @@ public class PlayerScript : SizeObject
     private Animator animator;
 
     private bool facingRight;
-    private bool isGrabbing;    
+    private bool isGrabbing;
 
     // Start is called before the first frame update
     void Start()
@@ -291,5 +291,12 @@ public class PlayerScript : SizeObject
     public override int GetMinSize()
     {
         return 1;
+    }
+
+    public static Vector3 currentCheckpointPos;
+
+    public void TeleportToCheckpoint()
+    {
+        transform.position = currentCheckpointPos;
     }
 }
