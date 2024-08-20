@@ -102,9 +102,9 @@ public class Crate : SizeObject
     private bool WouldCollide(Vector2 center, Vector2 size)
     {
         //load prefab from Assets/Prefabs/Square.prefab
-        GameObject square = Instantiate(Resources.Load<GameObject>("Square"), center, Quaternion.identity);
-        square.transform.position = center;
-        square.transform.localScale = size;
+        //GameObject square = Instantiate(Resources.Load<GameObject>("Square"), center, Quaternion.identity);
+        //square.transform.position = center;
+        //square.transform.localScale = size;
         RaycastHit2D[] hits = Physics2D.BoxCastAll(
             center,
             size,
