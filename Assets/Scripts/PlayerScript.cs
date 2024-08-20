@@ -23,6 +23,7 @@ public class PlayerScript : SizeObject
     // Start is called before the first frame update
     void Start()
     {
+        currentCheckpointPos = transform.position;
         size = 1;
         ResizeBy(1);
         animator = GetComponentInChildren<Animator>();
