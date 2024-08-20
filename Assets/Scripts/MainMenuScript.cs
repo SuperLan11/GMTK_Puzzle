@@ -5,9 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
+    public Animator fade;
+
     public void BeginGame()
-    {        
-        SceneManager.LoadScene("Level 1");        
+    {
+        fade.Play("FadeOut");
+        StartCoroutine(delayedLoad(2)) ;        
     }
 
     public void OpenOptions()
@@ -18,5 +21,10 @@ public class MainMenuScript : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    IEnumerator delayedLoad(int scene) {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(2);
     }
 }
