@@ -102,16 +102,16 @@ public class Crate : SizeObject
     private bool WouldCollide(Vector2 center, Vector2 size)
     {
         //load prefab from Assets/Prefabs/Square.prefab
-        //GameObject square = Instantiate(Resources.Load<GameObject>("Square"), center, Quaternion.identity);
-        //square.transform.position = center;
-        //square.transform.localScale = size;
+        GameObject square = Instantiate(Resources.Load<GameObject>("Square"), center, Quaternion.identity);
+        square.transform.position = center;
+        square.transform.localScale = size;
         RaycastHit2D[] hits = Physics2D.BoxCastAll(
             center,
             size,
             0,
             Vector2.zero,
             Mathf.Infinity,
-            ~(1 << LayerMask.NameToLayer("player"))
+            ~((1 << LayerMask.NameToLayer("player")) | (1 << LayerMask.NameToLayer("crates")))
         );
         foreach (RaycastHit2D hit in hits)
         {
@@ -140,11 +140,11 @@ public class Crate : SizeObject
             return false;
         }
         float topY = pos.y + GetBoxColliderHeight(gameObject) * scale / 2;
-        foreach (SizeObject crate in stackedCrates)
+        foreach (SizeObject crate in (isGrabbed ? boundCrates : stackedCrates))
         {
-            if (crate is Crate)
+            if (crate is Crate crate1)
             {
-                if (!((Crate)crate).CanMoveToBase(topY, x, resize))
+                if (!crate1.CanMoveToBase(topY, x, resize))
                 {
                     return false;
                 }
