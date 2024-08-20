@@ -16,6 +16,6 @@ For those who want their name anonymous, their username is used instead.
 - ConjuredFlower - Miscellaneous Help
 
 ## Credits
-The music was composed with the following soundfont, which has a Creative Commons license. https://musical-artifacts.com/artifacts/2391
+The music was composed with the following soundfont, which has a Creative Commons license. https://musical-artifacts.com/artifacts/2391.
 The button sound effect was used from Pixabay with a Royalty Free license.
 The cave tileset was used from https://odiurd.itch.io/tileset.
