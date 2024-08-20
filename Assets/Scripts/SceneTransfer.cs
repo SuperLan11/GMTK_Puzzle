@@ -12,15 +12,15 @@ public class SceneTransfer : MonoBehaviour
     {
         anim = GameObject.FindGameObjectWithTag("Fade").GetComponent<Animator>();
     }
-    public void Load()
+    public void Load(bool newLevel=false)
     {
         Debug.Log("loading scene");
-        StartCoroutine(LoadScene());
+        StartCoroutine(LoadScene(newLevel));
     }
-    IEnumerator LoadScene()
+    IEnumerator LoadScene(bool newLevel)
     {
         anim.SetTrigger("Fade");
         yield return new WaitForSecondsRealtime(1f);
-        SceneManager.LoadSceneAsync(targetSceneName).completed += _ => FindObjectOfType<PlayerScript>().TeleportToCheckpoint();
+        if (!newLevel) {SceneManager.LoadSceneAsync(targetSceneName).completed += _ => FindObjectOfType<PlayerScript>().TeleportToCheckpoint();}
     }
 }

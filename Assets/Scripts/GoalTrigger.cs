@@ -20,6 +20,6 @@ public class GoalTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<PlayerScript>() != null)       
-            GetComponent<SceneTransfer>().Load();        
+            GetComponent<SceneTransfer>().Load(newLevel:true);        
     }    
 }
