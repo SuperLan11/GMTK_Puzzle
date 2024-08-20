@@ -20,7 +20,7 @@ public class Crate : MonoBehaviour, SizeObject
     {
         stackedCrates = new List<Crate>();     
 
-        size = (int)this.transform.localScale.x;
+        size = (int)Math.Round(this.transform.localScale.x);
     }
 
     //called when a player grabs this crate
@@ -77,6 +77,7 @@ public class Crate : MonoBehaviour, SizeObject
 
     public void ThrowAll(Vector2 force)
     {
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<Rigidbody2D>().AddForce(force);
 
         foreach (Crate crate in boundCrates)
@@ -125,6 +126,7 @@ public class Crate : MonoBehaviour, SizeObject
             transform.localScale *= scale;
             resized = true;
         }
+
         if (isGrabbed)
         {
             foreach (Crate crate in boundCrates)
@@ -133,6 +135,7 @@ public class Crate : MonoBehaviour, SizeObject
                 {
                     crate.transform.localScale /= scale;
                 }
+
                 crate.ResizeBy(sizeDiff);
             }
         }
