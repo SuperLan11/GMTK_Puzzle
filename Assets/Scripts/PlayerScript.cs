@@ -69,8 +69,8 @@ public class PlayerScript : MonoBehaviour, SizeObject
         Vector2 colliderSize = transform.TransformVector(GetComponent<BoxCollider2D>().size);
         Vector2 newColliderCenter = transform.position + GetResizeAdjustment(sizeDiff);
         Vector2 newColliderSize = colliderSize * scale;
-        Debug.Log(newColliderCenter);
-        Debug.Log(newColliderSize);
+        //Debug.Log(newColliderCenter);
+        //Debug.Log(newColliderSize);
         return (newColliderCenter, newColliderSize);
     }
 
