@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour, SizeObject
+public class PlayerScript : SizeObject
 {
     [SerializeField] GameObject playerObj;
     [SerializeField] float moveSpeed;
@@ -45,7 +45,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
         return transform.TransformVector(Vector2.up * adjustment);
     }
 
-    public void ResizeBy(int sizeDiff)
+    public override void ResizeBy(int sizeDiff)
     {
         float scale = (float)(size + sizeDiff) / (size);
         if (isGrabbing)
@@ -84,16 +84,31 @@ public class PlayerScript : MonoBehaviour, SizeObject
         {
             xDirection = 1f;
             // flip player and grab trigger when turning
-            if (!facingRight)            
-                playerObj.transform.eulerAngles = new Vector3(0, 0, 0);                     
+            if (!facingRight)
+            {
+                if (isGrabbing)
+                {
+                    grabbedObject.transform.eulerAngles += new Vector3(0, 180, 0);
+                }
+                playerObj.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+
             facingRight = true;
         }
         // move player left
         else if(Input.GetKey(KeyCode.A))
         {
             xDirection = -1f;
-            if (facingRight)            
-                playerObj.transform.eulerAngles = new Vector3(0, 180, 0);             
+            if (facingRight)
+            {
+                if (isGrabbing)
+                {
+                    grabbedObject.transform.eulerAngles += new Vector3(0, 180, 0);
+                }
+                playerObj.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            
+
             facingRight = false;
         }
 
@@ -142,7 +157,7 @@ public class PlayerScript : MonoBehaviour, SizeObject
 
         // size up
         
-        if (Input.GetKeyDown(KeyCode.L) && ((SizeObject)this).CanExpand())
+        if (Input.GetKeyDown(KeyCode.L) && CanExpand())
         {
             var (newColliderCenter, newColliderSize) = getNewBounds(1);
             int layerMask = ~(1 << LayerMask.NameToLayer("player"));
@@ -250,16 +265,13 @@ public class PlayerScript : MonoBehaviour, SizeObject
         return true;
     }
 
-    public int GetMaxSize()
+    public override int GetMaxSize()
     {
         return 3;
     }
 
-    public int GetMinSize()
+    public override int GetMinSize()
     {
         return 1;
     }
-
-    public int size { get; set; }
-
 }

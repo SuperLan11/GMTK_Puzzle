@@ -1,30 +1,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class Crate : MonoBehaviour, SizeObject
+public class Crate : SizeObject
 {
     public GameObject crateObj;
     private float oldGravity;
     private bool isGrabbed;
-    private List<Crate> stackedCrates;
-    private List<Crate> boundCrates;
+    private List<SizeObject> stackedCrates;
+    private List<SizeObject> boundCrates;
    
     // box position - player position when grabbed
     private Vector2 grabLocalPos;
 
     void Start()
     {
-        stackedCrates = new List<Crate>();     
+        stackedCrates = new List<SizeObject>();     
 
         size = (int)Math.Round(this.transform.localScale.x);
     }
 
     //called when a player grabs this crate
-    public void EnterGrabbedState(Vector2 offset)
+    public override void EnterGrabbedState(Vector2 offset)
     {
         isGrabbed = true;
         oldGravity = GetComponent<Rigidbody2D>().gravityScale;
@@ -46,13 +47,17 @@ public class Crate : MonoBehaviour, SizeObject
             transform.position -= (Vector3)offset;
         }
 
-        boundCrates = new List<Crate>();
+        boundCrates = new List<SizeObject>();
         boundCrates.AddRange(stackedCrates);
-        foreach (Crate crate in boundCrates)
+        foreach (SizeObject crate in boundCrates)
         {
             crate.EnterGrabbedState(offset);
-            FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-            joint.connectedBody = crate.GetComponent<Rigidbody2D>();
+            if (crate is Crate)
+            {
+                FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
+                joint.connectedBody = crate.GetComponent<Rigidbody2D>();
+            }
+
             crate.transform.parent = transform;
         }
     }
@@ -69,18 +74,19 @@ public class Crate : MonoBehaviour, SizeObject
             Destroy(joint);
         }
         
-        foreach (Crate crate in boundCrates)
+        foreach (SizeObject crate in boundCrates)
         {
-            crate.ExitGrabbedState();
+            if (crate is Crate crate1)
+                crate1.ExitGrabbedState();
         }
     }
 
-    public void ThrowAll(Vector2 force)
+    public override void ThrowAll(Vector2 force)
     {
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<Rigidbody2D>().AddForce(force);
 
-        foreach (Crate crate in boundCrates)
+        foreach (SizeObject crate in boundCrates)
         {
             crate.ThrowAll(force);
         }
@@ -99,24 +105,17 @@ public class Crate : MonoBehaviour, SizeObject
         return (Vector3) pos - transform.position;
     }
 
-    public int GetMaxSize()
+    public override int GetMaxSize()
     {
         return 3;
     }
 
-    public int GetMinSize()
+    public override int GetMinSize()
     {
         return 1;
     }
     
-    [SerializeField] private int internalSize;
-    public int size
-    {
-        get => internalSize;
-        set => internalSize = value;
-    }
-
-    public void ResizeBy(int sizeDiff)
+    public override void ResizeBy(int sizeDiff)
     {
         float scale = (float)(size + sizeDiff) / (size);
         bool resized = false;
@@ -129,7 +128,7 @@ public class Crate : MonoBehaviour, SizeObject
 
         if (isGrabbed)
         {
-            foreach (Crate crate in boundCrates)
+            foreach (SizeObject crate in boundCrates)
             {
                 if (resized)
                 {
@@ -143,17 +142,17 @@ public class Crate : MonoBehaviour, SizeObject
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<Crate>() != null && other.contacts[0].normal.y < -0.9)
+        if (other.gameObject.GetComponent<SizeObject>() != null && other.contacts[0].normal.y < -0.9)
         {
-            stackedCrates.Add(other.gameObject.GetComponent<Crate>());
+            stackedCrates.Add(other.gameObject.GetComponent<SizeObject>());
         }
     }
     
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<Crate>() != null)
+        if (other.gameObject.GetComponent<SizeObject>() != null)
         {
-            stackedCrates.Remove(other.gameObject.GetComponent<Crate>());
+            stackedCrates.Remove(other.gameObject.GetComponent<SizeObject>());
         }
     }
     
@@ -161,18 +160,19 @@ public class Crate : MonoBehaviour, SizeObject
     {
         List<Crate> allCrates = new List<Crate>();
         allCrates.Add(this);
-        foreach (Crate crate in stackedCrates)
+        foreach (SizeObject crate in stackedCrates)
         {
-            allCrates.AddRange(crate.GetAllCrates());
-        }
+            if (crate is Crate) 
+                allCrates.AddRange(((Crate)crate).GetAllCrates());
+        }   
         return allCrates;
     }
 
-    public void JumpAll(Vector2 velocity)
+    public override void JumpAll(Vector2 velocity)
     {
         Debug.Log(GetComponent<Rigidbody2D>().velocity);
         GetComponent<Rigidbody2D>().velocity += velocity;
-        foreach (Crate crate in boundCrates)
+        foreach (SizeObject crate in boundCrates)
         {
             crate.JumpAll(velocity);
         }
