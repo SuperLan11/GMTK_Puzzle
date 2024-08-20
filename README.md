@@ -12,7 +12,7 @@ The game can also be accessed on this itch page: [https://gerzytet.itch.io/robot
 For those who want their name anonymous, their username is used instead.
 - Landon Johnson - Level Designer, Programmer, Composer
 - Craig White - Programmer, Playtester
-- MiLk - Artist, Playtester
+- MiLk - Artist, Programmer, Playtester
 - ConjuredFlower - Miscellaneous Help
 
 ## Credits
