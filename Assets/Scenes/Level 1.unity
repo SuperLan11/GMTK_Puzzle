@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 140251500}
   - component: {fileID: 140251502}
   m_Layer: 0
-  m_Name: LPrompt
+  m_Name: JPrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 343148341}
   - component: {fileID: 343148340}
   m_Layer: 0
-  m_Name: JText
+  m_Name: KText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: J
+  m_text: K
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
   m_sharedMaterial: {fileID: -8665894227678990266, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
@@ -896,7 +896,7 @@ GameObject:
   - component: {fileID: 528484684}
   - component: {fileID: 528484686}
   m_Layer: 0
-  m_Name: KPrompt
+  m_Name: LPrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1003,7 +1003,7 @@ GameObject:
   - component: {fileID: 627097936}
   - component: {fileID: 627097935}
   m_Layer: 0
-  m_Name: KText
+  m_Name: LText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1029,7 +1029,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: K
+  m_text: L
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
   m_sharedMaterial: {fileID: -8665894227678990266, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
@@ -1174,7 +1174,7 @@ GameObject:
   - component: {fileID: 642620008}
   - component: {fileID: 642620010}
   m_Layer: 0
-  m_Name: JPrompt
+  m_Name: KPrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2250,7 +2250,7 @@ GameObject:
   - component: {fileID: 1009220473}
   - component: {fileID: 1009220476}
   m_Layer: 0
-  m_Name: LText
+  m_Name: JText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2276,7 +2276,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: L
+  m_text: J
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
   m_sharedMaterial: {fileID: -8665894227678990266, guid: 07a35e00f16be8740881c99c2adb81aa, type: 2}
