@@ -6,7 +6,7 @@ The jam lasted 97 hours from 8/16/2024 - 8/20/2024.
 ## How to Play the Game
 Click the green code button, download the ZIP, and extract the folder.
 Open the Game folder in the extracted folder, and open Sizing Up.exe to start the game. 
-The game can also be accessed on this itch page: [https://gerzytet.itch.io/robot-vs-swan](https://blanksans.itch.io/sizing-up)
+The game can also be accessed on this itch page: https://blanksans.itch.io/sizing-up
 
 ## Team Contributions
 For those who want their name anonymous, their username is used instead.
