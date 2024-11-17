@@ -1,7 +1,8 @@
 ## Project Background
-Sizing Up is a game made by a team of four for the GMTK 2024 Game Jam. 
+Sizing Up is a 2D puzzle game made by a team of four for the GMTK 2024 Game Jam. 
 The jam had the theme "Built to Scale."
 The jam lasted 97 hours from 8/16/2024 - 8/20/2024.
+Our team placed in the top 15% of games for style and in the top 23% overall out of 7,610 submissions.
 
 ## How to Play the Game
 Click the green code button, download the ZIP, and extract the folder.
